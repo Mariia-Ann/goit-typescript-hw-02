@@ -1,0 +1,19 @@
+.btn {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.loadBtn {
+  font-size: 20px;
+  padding: 10px 30px;
+  border-radius: 10px;
+  border: none;
+  background-color: #7d3f79;
+  color: #f7f3f9;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.loadBtn:hover {
+  background-color: #6b3f7d;
+}

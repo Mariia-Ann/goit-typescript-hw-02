@@ -1,0 +1,34 @@
+.header {
+  padding: 20px;
+  background-color: #3b2d4d;
+  display: flex;
+  justify-content: center;
+}
+
+.form {
+  display: flex;
+}
+
+.button {
+  background-color: #b693c0;
+  border: none;
+  border-radius: 4px 0 0 4px;
+  padding: 10px 10px;
+}
+
+.icon {
+  display: flex;
+  color: #3b2d4d;
+}
+
+.input {
+  border: none;
+  border-radius: 0 4px 4px 0;
+  padding: 5px;
+  width: 260px;
+}
+
+.input:focus {
+  outline: none;
+  border: none;
+}

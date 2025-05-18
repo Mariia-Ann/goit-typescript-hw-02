@@ -1,7 +1,7 @@
 import PulseLoader from "react-spinners/PulseLoader";
 import style from "./Loader.module.css";
 
-const Loader = () => {
+const Loader: React.FC = () => {
   return (
     <div className={style.override}>
       <PulseLoader

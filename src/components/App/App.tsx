@@ -9,27 +9,28 @@ import SearchBar from "../SearchBar/SearchBar";
 import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import ImageModal from "../ImageModal/ImageModal";
+import { FetchImagesResponse, Image } from "../../types";
 
-const App = () => {
-  const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [loadMore, setLoadMore] = useState(false);
-  const [topic, setTopic] = useState("");
-  const [page, setPage] = useState(1);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalImage, setModalImage] = useState(null);
+const App: React.FC = () => {
+  const [images, setImages] = useState<Image[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [loadMore, setLoadMore] = useState<boolean>(false);
+  const [topic, setTopic] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [modalImage, setModalImage] = useState<Image | null>(null);
 
-  const galleryRef = useRef(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
 
-  const handleSearch = async (newTopic) => {
+  const handleSearch = async (newTopic: string): Promise<void> => {
     setTopic(newTopic);
     setPage(1);
     setImages([]);
     setError(false);
     setLoading(true);
     try {
-      const data = await fetchImagesWithTopic(newTopic, 1);
+      const data: FetchImagesResponse = await fetchImagesWithTopic(newTopic, 1);
       setImages(data.images);
       setLoadMore(data.loadMore);
     } catch (error) {
@@ -39,13 +40,16 @@ const App = () => {
     }
   };
 
-  const loadMoreImages = async () => {
+  const loadMoreImages = async (): Promise<void> => {
     if (!loadMore) return;
 
     setLoading(true);
     try {
       const nextPage = page + 1;
-      const data = await fetchImagesWithTopic(topic, nextPage);
+      const data: FetchImagesResponse = await fetchImagesWithTopic(
+        topic,
+        nextPage
+      );
       setImages((prevImages) => [...prevImages, ...data.images]);
       setLoadMore(data.loadMore);
       setPage(nextPage);
@@ -56,20 +60,26 @@ const App = () => {
     }
   };
 
-  const openModal = (image) => {
+  const openModal = (image: Image): void => {
     setModalImage(image);
     setModalOpen(true);
   };
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     setModalOpen(false);
     setModalImage(null);
+  };
+
+  const handleKeyDown = (e: KeyboardEvent): void => {
+    if (e.key === "Escape") {
+      closeModal();
+    }
   };
 
   useEffect(() => {
     if (page <= 1) return;
 
-    const liEl = galleryRef.current?.firstElementChild;
+    const liEl = galleryRef.current?.firstElementChild as HTMLElement | null;
     if (!liEl) return;
     const { height } = liEl.getBoundingClientRect();
 
@@ -80,17 +90,12 @@ const App = () => {
   }, [images]);
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
-        closeModal();
-      }
-    };
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [closeModal]);
+  }, []);
 
   return (
     <div className={style.section}>
